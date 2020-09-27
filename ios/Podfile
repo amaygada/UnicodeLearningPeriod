@@ -12,6 +12,8 @@ target 'task_one' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'RCTYouTube', :path => '../node_modules/react-native-youtube'
+
   target 'task_oneTests' do
     inherit! :complete
     # Pods for testing

@@ -2,7 +2,7 @@ import * as React from 'react'
 import {View , Text , StyleSheet} from 'react-native'
 import {Button} from 'react-native-paper'
 import AsyncStorage from '@react-native-community/async-storage';
-import {Header} from '/home/amay/Desktop/RN/task_one/Header/header.js'
+
 import RNRestart from 'react-native-restart'
 
 const styles = StyleSheet.create({
@@ -38,6 +38,7 @@ export class Profile extends React.Component{
 
     logOut = async()=>{
         await AsyncStorage.setItem('Login','No')
+        //this.props.Navigation.navigate('Login')
         RNRestart.Restart()
     }
 
@@ -45,10 +46,7 @@ export class Profile extends React.Component{
     render(){
         //if(this.state.logout===0){
             return(
-                <View>
-                    <View>
-                        <Header title = "Profile"/>
-                    </View>            
+                <View style={{backgroundColor:"#fff" , flex:1 , justifyContent:'center'}}>          
                         <View style={{justifyContent:'center' , alignItems:'center' , margin:20 }}>
                             <Text style={styles.text}> Name : {this.state.obj.name} </Text>
                             <Text style={styles.text}> Email Id : {this.state.obj.email} </Text>

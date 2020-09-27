@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Header} from '/home/amay/Desktop/RN/task_one/Header/header.js'
+import {Header} from '../Header/header.js'
 import{StyleSheet , View , TouchableOpacity , ScrollView} from 'react-native'
 import {TextInput , Text , Button} from 'react-native-paper'
 import CalendarPicker from 'react-native-calendar-picker';

@@ -2,8 +2,8 @@ import * as React from 'react'
 import {View , Text , StyleSheet , TouchableOpacity, Alert} from 'react-native'
 import {Button , TextInput} from 'react-native-paper'
 import AsyncStorage from '@react-native-community/async-storage';
-import {Parent} from '/home/amay/Desktop/RN/task_one/BottomNavFIles/parent.js'
-import {Header} from '/home/amay/Desktop/RN/task_one/Header/header.js'
+import {Parent} from '../BottomNavFIles/parent.js'
+import {Header} from '../Header/header.js'
  
 const styles = StyleSheet.create({
     input:{
