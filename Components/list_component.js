@@ -13,7 +13,7 @@ export let ListComponent = (props) =>{
     const channel = props.snip['channelTitle']
 
     return(
-        <Card style={{margin:10 , elevation:10}}>
+        <Card style={{margin:10}}>
             <Card.Cover source={{ uri: picture}} />
             <View style = {{flexDirection:'row' , paddingRight:10 , paddingLeft:10 , paddingTop:10 }}>
                 <Icon name="user-circle" size={30} color="#900" style={{paddingTop:5 , paddingRight:10 , paddingLeft:10}}/>

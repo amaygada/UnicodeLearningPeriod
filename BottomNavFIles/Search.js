@@ -33,6 +33,7 @@ export class SPage extends React.Component{
     }
 
     getData = async () => {
+        //this.setState({resultObj : {things:None}})
         const APIKEY = 'AIzaSyCZ9bu1mR6GgG5nyc5dYRK97GI_GdMxf2E'
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${this.state.searchquery}&type=video&key=${APIKEY}`
         
@@ -59,12 +60,26 @@ export class SPage extends React.Component{
         this.props.navigation.navigate('Video' , {result:obj})
     }
 
+    submit = async () => {
+        this.setState({resultObj:{things:"None"}})
+        await this.getData()
+    }
+
     render(){
         if(this.state.resultObj.things==='None'){
             return(
                 <View>
-                    <View style={{flex:1 , justifyContent:'center' , alignItems:'center'}}>
-                       <Text>loading...</Text>
+                    <View style={{padding:5}}>
+                    <Searchbar
+                        placeholder="Search"
+                        value = {this.state.searchquery}
+                        onChangeText = {this.setSearchQuery}/>
+                    </View>
+
+                    <View style = {{justifyContent:'center' , padding:20 , alignItems:'center' , flex:1 , alignContent:'center'}}>
+                       
+                            <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' }}>loading...</Text>
+                        
                     </View>
                 </View>
             )
@@ -76,7 +91,7 @@ export class SPage extends React.Component{
                         placeholder="Search"
                         value = {this.state.searchquery}
                         onChangeText = {this.setSearchQuery}
-                        onSubmitEditing={this.getData}
+                        onSubmitEditing={this.submit}
                     />                    
                 </View>
                 

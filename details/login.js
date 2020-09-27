@@ -20,9 +20,9 @@ export class Login extends React.Component{
         login:0
     }
 
-    getLoginState = async () =>{
+    getLoginState = () =>{
         try{
-            let val = await AsyncStorage.getItem('Login')
+            let val = AsyncStorage.getItem('Login')
             if(val!==null){
                 if(val==='yes')
                 this.setState({login : 1})
@@ -35,8 +35,8 @@ export class Login extends React.Component{
     }
 
     //before components mount set login state to whatever there is in asyncstorage Login
-    UNSAFE_componentWillMount = async () =>{
-        await this.getLoginState()
+    UNSAFE_componentWillMount = () =>{
+        this.getLoginState()
     }
 
     validate = () => {
@@ -84,6 +84,7 @@ export class Login extends React.Component{
                 await AsyncStorage.setItem('Login' , 'yes' )
 
                 this.setState({login:1})
+                this.props.navigation.navigate('Parent')
 
             }else{
                 alert('Incorrect Credentils!')
@@ -126,7 +127,8 @@ export class Login extends React.Component{
                     </View>
                 </View>
             )
-        }else if(this.state.login===1){
+        }
+        else if(this.state.login===1){
             return(
                 <Parent/>
             )
