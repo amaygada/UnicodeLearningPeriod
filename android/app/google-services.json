@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "178556559239",
+    "firebase_url": "https://unicodelearningperiod.firebaseio.com",
+    "project_id": "unicodelearningperiod",
+    "storage_bucket": "unicodelearningperiod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178556559239:android:8c9496302d12002a13fd22",
+        "android_client_info": {
+          "package_name": "com.task_one"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178556559239-mkdlf4hle8cq2pnsd4ifbco2dr6j3fji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaC95LLkxWwFLqHbmj14K5WT5IwxeisdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178556559239-mkdlf4hle8cq2pnsd4ifbco2dr6j3fji.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

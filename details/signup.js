@@ -2,12 +2,15 @@ import * as React from 'react'
 import {Header} from '../Header/header.js'
 import{StyleSheet , View , TouchableOpacity , ScrollView} from 'react-native'
 import {TextInput , Text , Button} from 'react-native-paper'
-import CalendarPicker from 'react-native-calendar-picker';
 import AsyncStorage from '@react-native-community/async-storage';
+import auth from '@react-native-firebase/auth';
+import DatePicker from 'react-native-datepicker'
 
 const styles = StyleSheet.create({
     input:{
-        padding:5
+        paddingLeft:7,
+        paddingRight:7,
+        paddingTop:3
     },
     date:{
         flex: 1,
@@ -22,9 +25,8 @@ export default class SignUp extends React.Component{
         name: "",
         email: "",
         password: "",
-        dob: "",
+        dob: "select Date of Birth",
         gender: "Male",
-        show:0,
         male : {checked:true , text:"#FFFFFF" , bgcolor:"#7d0633"},
         female: {checked: false , text:"#000000" , bgcolor:"#FFFFFF"},
         other: {checked: false , text:"#000000" , bgcolor:"#FFFFFF"},
@@ -35,7 +37,6 @@ export default class SignUp extends React.Component{
     onDateChange = (date) => {
         this.setState({
           dob: date,
-          show:0
         });
       }
 
@@ -90,7 +91,7 @@ export default class SignUp extends React.Component{
     }
 
     clear = () => {
-        this.setState({dob:"" , name:"" , password:"" , email:"" , disabledSignUp:true ,disabledClear:true})
+        this.setState({dob:"Select Date of Birth" , name:"" , password:"" , email:"" , disabledSignUp:true ,disabledClear:true})
     }
 
     signUpPress = async () => {
@@ -108,8 +109,32 @@ export default class SignUp extends React.Component{
         
     }
 
+    signupNew = () =>{
+        auth()
+        .createUserWithEmailAndPassword(`${this.state.email}`, `${this.state.password}`)
+        .then(() => {
+            console.log('User account created & signed in!');
+            this.props.navigation.goBack()
+        })
+        .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+            alert('That email address is already in use!');
+            }
+
+            if (error.code === 'auth/invalid-email') {
+            alert('That email address is invalid!');
+            }
+
+        console.error(error);
+        
+  });
+    }
+
+    goToLogin = () =>{
+        this.props.navigation.navigate('Login')
+    }
+
     render(){
-        if(this.state.show==0){
             return(
                 <View>
                     <View>
@@ -119,12 +144,21 @@ export default class SignUp extends React.Component{
                         <TextInput label="Name" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.name} onChangeText={this.getHandler('name')}/>
                         <TextInput label="Email" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.email.trim()} onChangeText={this.getHandler('email')}/>
                         <TextInput label="Password" secureTextEntry={true} style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.password.trim()} onChangeText={this.getHandler('password')}/>
-                        <TextInput label="Choose Date of Birth" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} mode="outlined" value={this.state.dob.toString().substring(4,15).trim()} onChangeText={this.getHandler('dob')}/>
-
-                        <View style={{alignItems:'center'}}>
-                            <Button mode="outlined" style={{backgroundColor:"1e4f74" , fontSize:20}}  color="#7d0633" onPress={()=>{this.setState({show:1})}}>Choose Date of Birth</Button>
-                        </View>
+                        <View style = {{justifyContent:'center' , alignItems:'center'}}>
+                        <DatePicker
+                        style={{width :250 ,padding:10}}
+                        date={this.state.date}
+                        mode="date"
+                        placeholder={this.state.dob}
+                        format="YYYY-MM-DD"
+                        minDate="1930-05-01"
+                        maxDate="2016-06-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        onDateChange={(date) => {this.setState({dob:date})}}
                         
+                        />
+                        </View>
                         <View style={{flexDirection:'row' , justifyContent:'center'}}>
                             <TouchableOpacity onPress={this.maleTouchHandler}>
                                 <View style={{padding:10, margin:10, borderWidth:1, borderRadius:5, borderColor:"#7d0633" , backgroundColor:this.state.male.bgcolor}}>
@@ -145,22 +179,17 @@ export default class SignUp extends React.Component{
                             </TouchableOpacity>
                         </View>
 
-                        <View style={{justifyContent:'center' , marginLeft:40 , marginRight:40 , marginTop:10}}>
-                            <Button mode="contained" color="#1e4f74" style={{margin:5}} disabled={this.state.disabledSignUp} onPress={this.signUpPress}>Sign Up</Button>
-                            <Button mode="contained" color="#1e4f74" style={{margin:5}} disabled={this.state.disabledClear} onPress={this.clear}>Clear</Button>
+                        <View style={{justifyContent:'center' , marginLeft:40 , marginRight:40 , marginTop:10 , alignItems:'center'}}>
+                            <Button mode="contained" color="#1e4f74" style={{margin:5 , width:200 }} disabled={this.state.disabledSignUp} onPress={this.signupNew}>Sign Up</Button>
+                            <Button mode="contained" color="#1e4f74" style={{margin:5, width:200}} disabled={this.state.disabledClear} onPress={this.clear}>Clear</Button>
+                            <Button mode="contained" color="#1e4f74" style={{margin:5, width:200}} onPress={this.goToLogin}>Login</Button>
                         </View>
 
                     </ScrollView>
                 </View>
     
             )
-        }else{
-            return(
-                <View style={styles.date}>
-                    <CalendarPicker onDateChange={this.onDateChange}/>
-                </View>
-            )
-        }
+        
        
     }
 

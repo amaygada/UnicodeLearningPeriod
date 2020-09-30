@@ -1,21 +1,51 @@
 import 'react-native-gesture-handler';
-import * as React from 'react'
+import React, { useState, useEffect } from 'react';
 import {Login} from './details/login.js'
 import Signup from './details/signup.js'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {Parent} from '/home/amay/Desktop/RN/task_one/BottomNavFIles/parent.js'
+import {Parent} from './BottomNavFIles/parent.js'
+import auth from '@react-native-firebase/auth';
+
 
 
 const Stack = createStackNavigator()
 
 export default function App(){
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+  if (!user) {
+    return (
+      <Detail/>
+    );
+  }
+
   return (
+    <Parent/>
+  );
+}
+
+function Detail(){
+
+  return(
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen name = "Login" component = {Login}/>
         <Stack.Screen name = "Sign Up" component = {Signup}/>
-        <Stack.Screen name="Parent" component={Parent}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

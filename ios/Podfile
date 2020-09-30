@@ -14,6 +14,8 @@ target 'task_one' do
 
   pod 'RCTYouTube', :path => '../node_modules/react-native-youtube'
 
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
   target 'task_oneTests' do
     inherit! :complete
     # Pods for testing
