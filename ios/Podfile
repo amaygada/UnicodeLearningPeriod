@@ -16,6 +16,8 @@ target 'task_one' do
 
   pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'task_oneTests' do
     inherit! :complete
     # Pods for testing

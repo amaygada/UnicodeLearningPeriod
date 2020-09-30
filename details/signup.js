@@ -5,12 +5,15 @@ import {TextInput , Text , Button} from 'react-native-paper'
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
 import DatePicker from 'react-native-datepicker'
+import ImagePicker from 'react-native-image-picker'
+import firestore from '@react-native-firebase/firestore';
 
 const styles = StyleSheet.create({
     input:{
         paddingLeft:7,
         paddingRight:7,
-        paddingTop:3
+        paddingTop:3,
+        flex:1
     },
     date:{
         flex: 1,
@@ -19,19 +22,40 @@ const styles = StyleSheet.create({
     }
 })
 
+const ref = firestore().collection('User')
+
 export default class SignUp extends React.Component{
+
+     addUser = async () => {
+        await ref.doc(`${this.state.email}`).set({
+            email:this.state.email,
+            name: this.state.name,
+            gender:this.state.gender,
+            dob:this.state.dob,
+            photo:this.state.photo
+        });
+      }
+
+    handleChoosePhoto = () => {
+        const options = {noData:true }
+        ImagePicker.launchImageLibrary(options , (response)=>{
+            console.log(response)
+            this.setState({photo:response})
+        })
+    }
 
     state={
         name: "",
         email: "",
         password: "",
-        dob: "select Date of Birth",
+        dob: "Select Date of Birth",
         gender: "Male",
         male : {checked:true , text:"#FFFFFF" , bgcolor:"#7d0633"},
         female: {checked: false , text:"#000000" , bgcolor:"#FFFFFF"},
         other: {checked: false , text:"#000000" , bgcolor:"#FFFFFF"},
         disabledSignUp:true,
         disabledClear:true,
+        photo:null
     }
 
     onDateChange = (date) => {
@@ -49,17 +73,17 @@ export default class SignUp extends React.Component{
         const nameRegx2 = /^\w+\s\w+$/
         const emailRegx = /^([a-z\d\.-]+)@([a-z\d]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
         const passwordRegx = /[a-zA-Z0-9%!@#$^&*;:?\/'\"<,>\.(){}\[\]]{8,}/
-        const dobRegx = /^(Jan)?(Feb)?(Mar)?(Apr)?(May)?(Jun)?(Jul)?(Aug)?(Sep)?(Oct)?(Nov)?(Dec)?\s(\d{2})\s(\d{4})$/
+        //const dobRegx = /^(Jan)?(Feb)?(Mar)?(Apr)?(May)?(Jun)?(Jul)?(Aug)?(Sep)?(Oct)?(Nov)?(Dec)?\s(\d{2})\s(\d{4})$/
 
-        const dobnew = this.state.dob.toString().substring(4,15);
+        //const dobnew = this.state.dob.toString().substring(4,15);
     
-        if(nameRegx1.exec((this.state.name.toString()) || nameRegx2.exec(this.state.name.toString())) && emailRegx.exec(this.state.email.toString()) && passwordRegx.exec(this.state.password.toString()) && dobRegx.exec(dobnew)){
+        if(nameRegx1.exec((this.state.name.toString()) || nameRegx2.exec(this.state.name.toString())) && emailRegx.exec(this.state.email.toString()) && passwordRegx.exec(this.state.password.toString()) && this.state.photo!==null && this.state.dob!="Select Date of Birth"){
             this.setState({disabledSignUp:false})
         }else{this.setState({disabledSignUp:true})}
     }
 
     clearDisableHandle = ()=> {
-        if(this.state.name==="" && this.state.dob==="" && this.state.email==="" && this.state.password===""){
+        if(this.state.name==="" && this.state.dob==="" && this.state.email==="" && this.state.password===""&& this.state.photo===null){
             this.setState({disabledClear:true})
         }else{
             this.setState({disabledClear:false})
@@ -91,7 +115,7 @@ export default class SignUp extends React.Component{
     }
 
     clear = () => {
-        this.setState({dob:"Select Date of Birth" , name:"" , password:"" , email:"" , disabledSignUp:true ,disabledClear:true})
+        this.setState({dob:"Select Date of Birth" , name:"" , password:"" , email:"" , photo:null ,disabledSignUp:true ,disabledClear:true})
     }
 
     signUpPress = async () => {
@@ -115,6 +139,7 @@ export default class SignUp extends React.Component{
         .then(() => {
             console.log('User account created & signed in!');
             this.props.navigation.goBack()
+            this.addUser()
         })
         .catch(error => {
             if (error.code === 'auth/email-already-in-use') {
@@ -136,15 +161,25 @@ export default class SignUp extends React.Component{
 
     render(){
             return(
-                <View>
+                <View style={{flex:1}}>
                     <View>
                         <Header title="Sign Up"/>
                     </View>
-                    <ScrollView>
+                    <View style = {{flex:1}}>
+                    <ScrollView contentContainerStyle = {{flexGrow:1}}>
                         <TextInput label="Name" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.name} onChangeText={this.getHandler('name')}/>
-                        <TextInput label="Email" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.email.trim()} onChangeText={this.getHandler('email')}/>
+                        <TextInput label="Email" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.email.trim().toLowerCase()} onChangeText={this.getHandler('email')}/>
                         <TextInput label="Password" secureTextEntry={true} style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.password.trim()} onChangeText={this.getHandler('password')}/>
-                        <View style = {{justifyContent:'center' , alignItems:'center'}}>
+                        
+                        <Button mode="text" color="#7d0633" onPress={this.handleChoosePhoto}>Choose Profile Picture</Button>
+                        
+                        {
+                            this.state.photo && (<View style = {{alignItems:'center' , justifyContent:'center',flex:1 ,paddingBottom:3}}>
+                                <Text style={{fontSize:12 , color:"#aeaeae"}}>(Photo selected successfully!)</Text>
+                            </View>)
+                        }
+
+                        <View style = {{justifyContent:'center' , alignItems:'center' , flex:1}}>
                         <DatePicker
                         style={{width :250 ,padding:10}}
                         date={this.state.date}
@@ -156,10 +191,10 @@ export default class SignUp extends React.Component{
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
                         onDateChange={(date) => {this.setState({dob:date})}}
-                        
                         />
                         </View>
-                        <View style={{flexDirection:'row' , justifyContent:'center'}}>
+
+                        <View style={{flexDirection:'row' , justifyContent:'center' , flex:1}}>
                             <TouchableOpacity onPress={this.maleTouchHandler}>
                                 <View style={{padding:10, margin:10, borderWidth:1, borderRadius:5, borderColor:"#7d0633" , backgroundColor:this.state.male.bgcolor}}>
                                     <Text style={{color:this.state.male.text}}> Male </Text>
@@ -179,13 +214,14 @@ export default class SignUp extends React.Component{
                             </TouchableOpacity>
                         </View>
 
-                        <View style={{justifyContent:'center' , marginLeft:40 , marginRight:40 , marginTop:10 , alignItems:'center'}}>
+                        <View style={{justifyContent:'center' , marginLeft:40 , marginRight:40 , marginTop:10 , alignItems:'center' , flex:1}}>
                             <Button mode="contained" color="#1e4f74" style={{margin:5 , width:200 }} disabled={this.state.disabledSignUp} onPress={this.signupNew}>Sign Up</Button>
                             <Button mode="contained" color="#1e4f74" style={{margin:5, width:200}} disabled={this.state.disabledClear} onPress={this.clear}>Clear</Button>
                             <Button mode="contained" color="#1e4f74" style={{margin:5, width:200}} onPress={this.goToLogin}>Login</Button>
                         </View>
 
                     </ScrollView>
+                    </View>
                 </View>
     
             )
