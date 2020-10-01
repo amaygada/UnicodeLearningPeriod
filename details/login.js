@@ -2,7 +2,6 @@ import * as React from 'react'
 import {View , Text , StyleSheet , TouchableOpacity, ScrollView} from 'react-native'
 import {Button , TextInput} from 'react-native-paper'
 import AsyncStorage from '@react-native-community/async-storage';
-import {Parent} from '../BottomNavFIles/parent.js'
 import {Header} from '../Header/header.js'
 import auth from '@react-native-firebase/auth';
  
@@ -24,7 +23,7 @@ export class Login extends React.Component{
         const emailRegx = /^([a-z\d\.-]+)@([a-z\d]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
         const passwordRegx = /[a-zA-Z0-9%!@#$^&*;:?\/'\"<,>\.(){}\[\]]{8,}/
 
-        if(emailRegx.exec(this.state.email.toString()) && passwordRegx.exec(this.state.password.toString())){
+        if(emailRegx.exec(this.state.email.toString().toLowerCase()) && passwordRegx.exec(this.state.password.toString())){
             this.setState({disableLogin:false})
         }else{this.setState({disableLogin:true})}
     }
@@ -49,34 +48,13 @@ export class Login extends React.Component{
         this.props.navigation.navigate('Sign Up')
     }
 
-    loginPress = async () => {
-        //get data from async storage and check with email of this state.
-        try {
-            const jsonValue = await AsyncStorage.getItem(this.state.email.toString())
+    saveEmail = async () => {
+        try{
+            await AsyncStorage.setItem('current' , this.state.email)
 
-            let obj ={}
-
-            if(jsonValue!==null){obj = JSON.parse(jsonValue)}else{obj={}}
-
-            if(obj!=={} && obj.email === this.state.email && obj.password===this.state.password){
-                console.log('Success')
-
-                await AsyncStorage.setItem('current' , jsonValue)
-                await AsyncStorage.setItem('Login' , 'yes' )
-
-                this.setState({login:1})
-                this.props.navigation.navigate('Parent')
-
-            }else{
-                alert('Incorrect Credentils!')
-            }
-
-          } catch(e) {
+        }catch(e){
             console.log(e)
-            console.log(`Login Failed due to ${e}`)
-            alert('Incorrect Credentils!')
-          }
-
+        }
     }
 
     LoginNew = async () =>{
@@ -84,6 +62,7 @@ export class Login extends React.Component{
         .signInWithEmailAndPassword(`${this.state.email}`, `${this.state.password}`)
         .then(() => {
             console.log('User account created & signed in!');
+            this.saveEmail()
             //this.props.navigation.navigate('Parent')
         })
         .catch(error => {
@@ -112,7 +91,7 @@ export class Login extends React.Component{
                     </View>
                     <ScrollView>
                     <View style={styles.container}>
-                    <TextInput label="Email" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.email.trim().toLowerCase()} onChangeText={this.getHandler('email')}/>
+                    <TextInput label="Email" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.email.trim()} onChangeText={this.getHandler('email')}/>
                     <TextInput label="Password" secureTextEntry={true} style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.password.trim()} onChangeText={this.getHandler('password')}/>
                     </View>
     

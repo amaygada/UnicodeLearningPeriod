@@ -1,9 +1,9 @@
 import * as React from 'react'
-import {View , Text , StyleSheet} from 'react-native'
+import {View , Text ,Image , StyleSheet} from 'react-native'
 import {Button} from 'react-native-paper'
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
-
+import firestore from '@react-native-firebase/firestore';
 import RNRestart from 'react-native-restart'
 
 const styles = StyleSheet.create({
@@ -14,27 +14,44 @@ const styles = StyleSheet.create({
     }
 })
 
+
 export class Profile extends React.Component{
-    // state = {
-    //     obj:{},
-    // }
+    state = {
+        email:'',
+        dob : '',
+        gender: '',
+        photo: null,
+        name: ''
+    }
 
-    // UNSAFE_componentWillMount = async() => {
-    //     try{
-    //         let jsonValue = await AsyncStorage.getItem('current')
-    //         let o ={}
-    //         if(jsonValue!==null){
-    //             o = JSON.parse(jsonValue)
-    //         }else{o={}}
+    UNSAFE_componentWillMount = async() => {
+        try{
+            let emailVal = await AsyncStorage.getItem('current')
+            
+            if(emailVal!==null){
+                this.setState({email:emailVal})
+                this.getUserData()
+            }
+        }catch(e){
+            console.log(e)
+        }
+    }
 
-    //         if(o!=={}){
-    //             this.setState({obj:o})
-    //         }
-    //     }catch(e){
-    //         console.log(e)
-    //     }
-
-    // }
+    getUserData = () => {
+        const db = firestore().collection('User');
+        db.doc(`${this.state.email}`)
+        .get()
+        .then((doc) => {
+            if (doc.exists) {
+                this.setState({email:doc.data().email , dob:doc.data().dob , gender:doc.data().gender , photo:doc.data().photo , name:doc.data().name})
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+    }
 
 
     logOut = async () =>{
@@ -47,22 +64,50 @@ export class Profile extends React.Component{
         
     }
 
+    deleteAccount = async ()=>{
+        const user = auth().currentUser;
+        try{
+            this.deleteFirestoreDoc()
+            if (user) {
+                user.delete().then(
+                    () => {console.log('account deleted')}
+                )
+            }
+        }catch(e){
+            if(e.code === 'auth/requires-recent-login'){
+                alert('Login again to perform this operation!')
+            }
+        }
+    }
+
+    deleteFirestoreDoc = () => {
+        const db = firestore().collection('User');
+        db.doc(`${this.state.email}`).delete().then(() => {
+            console.log("Document successfully deleted!");
+        }).catch(function(error) {
+            console.error("Error removing document: ", error);
+        });
+    }
 
     render(){
         return(
             <View style={{backgroundColor:"#fff" , flex:1 , justifyContent:'center'}}>          
                    <View style={{justifyContent:'center' , alignItems:'center' , margin:20 }}>
-                        <Button  color="#1e4f74" style={{margin:50}} mode="outlined" onPress={this.logOut}>Logout</Button>
+                        {this.state.photo && (
+                            <Image
+                            source={{ uri: this.state.photo}}
+                            style = {{width:200 , height:200}}
+                           />
+                        )}
+                        <Text style={styles.text}> Name : {this.state.name} </Text>
+                        <Text style={styles.text}> Email Id : {this.state.email} </Text>
+                        <Text style={styles.text}> Gender : {this.state.gender} </Text>
+                        <Text style={styles.text}> DOB : {this.state.dob}</Text>
+                        <Button  color="#1e4f74" style = {{marginTop:10}} mode="outlined" onPress={this.logOut}>Logout</Button>
+                        <Button  color="#1e4f74" style = {{marginTop:10}} mode="outlined" onPress={this.deleteAccount}>Delete Account</Button>
                     </View>
             </View>
         )
     }
 
 }
-
-/*
-<Text style={styles.text}> Name : {this.state.obj.name} </Text>
-                        <Text style={styles.text}> Email Id : {this.state.obj.email} </Text>
-                        <Text style={styles.text}> Gender : {this.state.obj.gender} </Text>
-                        <Text style={styles.text}> Paassword : {this.state.obj.password}</Text>
-                         */

@@ -26,7 +26,22 @@ const ref = firestore().collection('User')
 
 export default class SignUp extends React.Component{
 
-     addUser = async () => {
+    state={
+        name: "",
+        email: "",
+        password: "",
+        dob: "Select Date of Birth",
+        gender: "Male",
+        male : {checked:true , text:"#FFFFFF" , bgcolor:"#7d0633"},
+        female: {checked: false , text:"#000000" , bgcolor:"#FFFFFF"},
+        other: {checked: false , text:"#000000" , bgcolor:"#FFFFFF"},
+        disabledSignUp:true,
+        disabledClear:true,
+        photo:null,
+        createAccount : false
+    }
+
+    addUser = async () => {
         await ref.doc(`${this.state.email}`).set({
             email:this.state.email,
             name: this.state.name,
@@ -40,22 +55,8 @@ export default class SignUp extends React.Component{
         const options = {noData:true }
         ImagePicker.launchImageLibrary(options , (response)=>{
             console.log(response)
-            this.setState({photo:response})
+            this.setState({photo:response.uri})
         })
-    }
-
-    state={
-        name: "",
-        email: "",
-        password: "",
-        dob: "Select Date of Birth",
-        gender: "Male",
-        male : {checked:true , text:"#FFFFFF" , bgcolor:"#7d0633"},
-        female: {checked: false , text:"#000000" , bgcolor:"#FFFFFF"},
-        other: {checked: false , text:"#000000" , bgcolor:"#FFFFFF"},
-        disabledSignUp:true,
-        disabledClear:true,
-        photo:null
     }
 
     onDateChange = (date) => {
@@ -118,27 +119,12 @@ export default class SignUp extends React.Component{
         this.setState({dob:"Select Date of Birth" , name:"" , password:"" , email:"" , photo:null ,disabledSignUp:true ,disabledClear:true})
     }
 
-    signUpPress = async () => {
-        const emailId = this.state.email.toString()
-        const obj = {email:this.state.email , name:this.state.name , gender:this.state.gender , password : this.state.password , dob : this.state.dob}
-
-        try{
-            const jsonValue = JSON.stringify(obj)
-            await AsyncStorage.setItem(emailId, jsonValue)
-        }catch(e){
-            console.log(e)
-        }
-
-        this.props.navigation.goBack()
-        
-    }
-
     signupNew = () =>{
         auth()
         .createUserWithEmailAndPassword(`${this.state.email}`, `${this.state.password}`)
         .then(() => {
             console.log('User account created & signed in!');
-            this.props.navigation.goBack()
+            //this.setState({createAccount:true})
             this.addUser()
         })
         .catch(error => {
@@ -160,6 +146,7 @@ export default class SignUp extends React.Component{
     }
 
     render(){
+        
             return(
                 <View style={{flex:1}}>
                     <View>
@@ -225,6 +212,7 @@ export default class SignUp extends React.Component{
                 </View>
     
             )
+        
         
        
     }
