@@ -2,28 +2,12 @@ import * as React from 'react'
 import {View , Text , FlatList , TouchableOpacity,RefreshControl} from 'react-native'
 import {Searchbar} from 'react-native-paper'
 import {ListComponent} from '../Components/list_component.js'
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import {Video} from '../BottomNavFIles/video.js'
 import AsyncStorage from '@react-native-community/async-storage';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-
-const Stack = createStackNavigator();
-
-export function Search(){
-    return (
-      <NavigationContainer independent = {true}>
-        <Stack.Navigator initialRouteName="SPage" screenOptions={{headerShown:false}}>
-          <Stack.Screen name = "Spage" component={SPage} />
-          <Stack.Screen name="Video" component={Video} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
+import { useNavigation } from '@react-navigation/native';
 
 
-export class SPage extends React.Component{
+class Search extends React.Component{
 
     state = {
         searchquery : "",
@@ -38,7 +22,7 @@ export class SPage extends React.Component{
     getData = async () => {
         //this.setState({resultObj : {things:None}})
         const APIKEY = 'AIzaSyCZ9bu1mR6GgG5nyc5dYRK97GI_GdMxf2E'
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${this.state.searchquery}&type=video&key=${APIKEY}`
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${this.state.searchquery}&type=video&key=${APIKEY}`
         
         try{
             let response = await fetch(`${url}`)
@@ -61,7 +45,8 @@ export class SPage extends React.Component{
     }
 
     navigateToVideo = (obj) =>{
-        this.props.navigation.navigate('Video' , {result:obj})
+        const {navigation} = this.props
+        navigation.navigate('Video' , {result:obj})
     }
 
     submit = async () => {
@@ -111,3 +96,9 @@ export class SPage extends React.Component{
         )}
     }
 }
+
+export default function(props) {
+    const navigation = useNavigation();
+  
+    return <Search {...props} navigation={navigation} />;
+  }

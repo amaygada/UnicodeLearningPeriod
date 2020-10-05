@@ -9,12 +9,15 @@ export class Video extends React.Component{
         isReady: false,
         status: "",
         quality: "",
-        error: ""
+        error: "" , 
+        object: null
     }
 
+    UNSAFE_componentWillMount = () => {
+        this.setState({object : this.props.route.params.result})
+    }
 
     render(){
-
         let obj = this.props.route.params.result
         //console.log(obj)
         const APIKEY = 'AIzaSyCZ9bu1mR6GgG5nyc5dYRK97GI_GdMxf2E'
@@ -40,7 +43,7 @@ export class Video extends React.Component{
                     <Text style={{paddingLeft:10, paddingRight:0, paddingTop:3, color:"#2f2f31"}}>{Channel}    --    {time}</Text>
                     <Text style={{paddingLeft:10 , paddingRight:0, paddingTop:3, fontWeight:"bold" , fontSize:17}}>{obj.snippet['title']}</Text>
                     <Card.Actions>
-                    <Button style={{backgroundColor:"1e4f74" , fontSize:20}}  color="#7d0633" onPress={()=>{ this.props.navigation.navigate('Spage')}}>GO BACK</Button>
+                    <Button style={{backgroundColor:"1e4f74" , fontSize:20}}  color="#7d0633" onPress={()=>{ this.props.navigation.goBack()}}>GO BACK</Button>
                     </Card.Actions>
                 
                 </Card>
@@ -55,6 +58,7 @@ const styles = StyleSheet.create({
     },
     youtube: {
     alignSelf: 'stretch',
-    height: 300
+    height: 300,
+    margin:0
     }
 });

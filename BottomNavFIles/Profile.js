@@ -82,9 +82,7 @@ export class Profile extends React.Component{
                 )
             }
         }catch(e){
-            if(e.code === 'auth/requires-recent-login'){
-                alert('Login again to perform this operation!')
-            }
+        alert('Login again to perform this operation!')
         }
     }
 
