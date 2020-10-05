@@ -1,10 +1,13 @@
 import * as React from 'react'
-import {View , Text ,Image , FlatList , TouchableOpacity,RefreshControl} from 'react-native'
+import {View , Text , FlatList , TouchableOpacity,RefreshControl} from 'react-native'
 import {Searchbar} from 'react-native-paper'
 import {ListComponent} from '../Components/list_component.js'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {Video} from '../BottomNavFIles/video.js'
+import AsyncStorage from '@react-native-community/async-storage';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const Stack = createStackNavigator();
 
@@ -52,11 +55,12 @@ export class SPage extends React.Component{
         await this.getData()
     }
 
-    UNSAFE_componentWillMount = async() => {
+    componentDidMount = async() => {
         await this.getData()
+        //this.logOut()
     }
 
-    navigatToVideo = (obj) =>{
+    navigateToVideo = (obj) =>{
         this.props.navigation.navigate('Video' , {result:obj})
     }
 
@@ -77,9 +81,7 @@ export class SPage extends React.Component{
                     </View>
 
                     <View style = {{justifyContent:'center' , padding:20 , alignItems:'center' , flex:1 , alignContent:'center'}}>
-                       
-                            <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' }}>loading...</Text>
-                        
+                        <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' }}>loading...</Text>
                     </View>
                 </View>
             )
@@ -98,7 +100,7 @@ export class SPage extends React.Component{
                     <FlatList style ={{flex:1}}
                         data = {this.state.resultObj.items}
                         renderItem = {({item}) => (
-                        <TouchableOpacity onPress={() => {this.navigatToVideo(item)}}>
+                        <TouchableOpacity onPress={() => {this.navigateToVideo(item)}}>
                             <ListComponent snip = {item.snippet}/>
                         </TouchableOpacity>
                         )}

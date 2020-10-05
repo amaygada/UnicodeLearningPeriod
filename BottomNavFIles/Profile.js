@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import RNRestart from 'react-native-restart'
+import storage from '@react-native-firebase/storage'
 
 const styles = StyleSheet.create({
     text:{
@@ -13,7 +14,6 @@ const styles = StyleSheet.create({
         padding:5
     }
 })
-
 
 export class Profile extends React.Component{
     state = {
@@ -31,10 +31,18 @@ export class Profile extends React.Component{
             if(emailVal!==null){
                 this.setState({email:emailVal})
                 this.getUserData()
+                this.getImage()
             }
         }catch(e){
             console.log(e)
         }
+    }
+
+    getImage = async () => {
+        const url = await storage()
+        .ref(`${this.state.email}.jpg`)
+        .getDownloadURL();
+        this.setState({photo:url})
     }
 
     getUserData = () => {
@@ -43,7 +51,7 @@ export class Profile extends React.Component{
         .get()
         .then((doc) => {
             if (doc.exists) {
-                this.setState({email:doc.data().email , dob:doc.data().dob , gender:doc.data().gender , photo:doc.data().photo , name:doc.data().name})
+                this.setState({email:doc.data().email ,dob:doc.data().dob , gender:doc.data().gender , name:doc.data().name})
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");

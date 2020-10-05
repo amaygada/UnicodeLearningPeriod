@@ -2,11 +2,11 @@ import * as React from 'react'
 import {Header} from '../Header/header.js'
 import{StyleSheet , View , TouchableOpacity , ScrollView} from 'react-native'
 import {TextInput , Text , Button} from 'react-native-paper'
-import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
 import DatePicker from 'react-native-datepicker'
 import ImagePicker from 'react-native-image-picker'
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 const styles = StyleSheet.create({
     input:{
@@ -41,21 +41,21 @@ export default class SignUp extends React.Component{
         createAccount : false
     }
 
+    
+
     addUser = async () => {
         await ref.doc(`${this.state.email}`).set({
             email:this.state.email,
             name: this.state.name,
             gender:this.state.gender,
             dob:this.state.dob,
-            photo:this.state.photo
         });
       }
 
     handleChoosePhoto = () => {
         const options = {noData:true }
-        ImagePicker.launchImageLibrary(options , (response)=>{
-            console.log(response)
-            this.setState({photo:response.uri})
+        ImagePicker.launchImageLibrary(options , async (response)=>{
+            this.setState({photo:response.path})
         })
     }
 
@@ -74,9 +74,6 @@ export default class SignUp extends React.Component{
         const nameRegx2 = /^\w+\s\w+$/
         const emailRegx = /^([a-z\d\.-]+)@([a-z\d]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
         const passwordRegx = /[a-zA-Z0-9%!@#$^&*;:?\/'\"<,>\.(){}\[\]]{8,}/
-        //const dobRegx = /^(Jan)?(Feb)?(Mar)?(Apr)?(May)?(Jun)?(Jul)?(Aug)?(Sep)?(Oct)?(Nov)?(Dec)?\s(\d{2})\s(\d{4})$/
-
-        //const dobnew = this.state.dob.toString().substring(4,15);
     
         if(nameRegx1.exec((this.state.name.toString()) || nameRegx2.exec(this.state.name.toString())) && emailRegx.exec(this.state.email.toString()) && passwordRegx.exec(this.state.password.toString()) && this.state.photo!==null && this.state.dob!="Select Date of Birth"){
             this.setState({disabledSignUp:false})
@@ -119,13 +116,14 @@ export default class SignUp extends React.Component{
         this.setState({dob:"Select Date of Birth" , name:"" , password:"" , email:"" , photo:null ,disabledSignUp:true ,disabledClear:true})
     }
 
-    signupNew = () =>{
+    signupNew =  () =>{
         auth()
         .createUserWithEmailAndPassword(`${this.state.email}`, `${this.state.password}`)
-        .then(() => {
+        .then(async () => {
             console.log('User account created & signed in!');
-            //this.setState({createAccount:true})
+            await this.uploadImage()
             this.addUser()
+            
         })
         .catch(error => {
             if (error.code === 'auth/email-already-in-use') {
@@ -143,6 +141,22 @@ export default class SignUp extends React.Component{
 
     goToLogin = () =>{
         this.props.navigation.navigate('Login')
+    }
+
+    uploadImage = async () => {
+        const image = this.state.photo
+        const filename = `${this.state.email}.jpg`
+
+        const task = storage()
+        .ref(filename)
+        .putFile(image);
+
+        try{
+            await task
+        }catch(e){
+            console.log(e)
+        }
+
     }
 
     render(){
