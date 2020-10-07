@@ -49,6 +49,7 @@ export default class SignUp extends React.Component{
             name: this.state.name,
             gender:this.state.gender,
             dob:this.state.dob,
+            fav:"{}"
         });
       }
 
@@ -169,7 +170,7 @@ export default class SignUp extends React.Component{
                     <View style = {{flex:1}}>
                     <ScrollView contentContainerStyle = {{flexGrow:1}}>
                         <TextInput label="Name" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.name} onChangeText={this.getHandler('name')}/>
-                        <TextInput label="Email" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.email.trim().toLowerCase()} onChangeText={this.getHandler('email')}/>
+                        <TextInput label="Email" style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.email.trim()} onChangeText={this.getHandler('email')}/>
                         <TextInput label="Password" secureTextEntry={true} style={styles.input} theme={{ colors: { primary: '#1e5f74',underlineColor:'transparent',}}} keyboardType="default" mode="outlined" value={this.state.password.trim()} onChangeText={this.getHandler('password')}/>
                         
                         <Button mode="text" color="#7d0633" onPress={this.handleChoosePhoto}>Choose Profile Picture</Button>

@@ -2,8 +2,6 @@ import * as React from 'react'
 import {View , Text , FlatList , TouchableOpacity,RefreshControl} from 'react-native'
 import {Searchbar} from 'react-native-paper'
 import {ListComponent} from '../Components/list_component.js'
-import {Video} from '../BottomNavFIles/video.js'
-import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 

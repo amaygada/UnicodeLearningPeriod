@@ -27,7 +27,6 @@ export class Profile extends React.Component{
     UNSAFE_componentWillMount = async() => {
         try{
             let emailVal = await AsyncStorage.getItem('current')
-            
             if(emailVal!==null){
                 this.setState({email:emailVal})
                 this.getUserData()
@@ -111,6 +110,7 @@ export class Profile extends React.Component{
                         <Text style={styles.text}> DOB : {this.state.dob}</Text>
                         <Button  color="#1e4f74" style = {{marginTop:10}} mode="outlined" onPress={this.logOut}>Logout</Button>
                         <Button  color="#1e4f74" style = {{marginTop:10}} mode="outlined" onPress={this.deleteAccount}>Delete Account</Button>
+                        <Text style={{fontSize:12,padding:3 , color:"#aeaeae"}}>(LOGIN AGAIN TO DELETE ACCOUNT)</Text>
                     </View>
             </View>
         )

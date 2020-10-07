@@ -40,7 +40,7 @@ const TabBar = () => {
   export function Parent(){
     return (
       <NavigationContainer independent={true}>
-        <Stack.Navigator initialRouteName="Search" screenOptions={{headerShown:false}}>
+        <Stack.Navigator initialRouteName="tabbar" screenOptions={{headerShown:false}}>
           <Stack.Screen name = "tabbar" component={TabBar} />
           <Stack.Screen name="Video" component={Video}/>
         </Stack.Navigator>
