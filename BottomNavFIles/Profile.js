@@ -58,6 +58,15 @@ export class Profile extends React.Component{
         })
     }
 
+    deleteFirebaseImage = () =>{
+        var image = storage().ref(`${this.state.email}.jpg`);
+
+        image.delete().then(function() {
+          console.log('profile image deleted succesfully')
+        }).catch(function(error) {
+          console.log('I really can\'t do anything about this')
+        });
+    }
 
     logOut = async () =>{
         auth()
@@ -73,13 +82,15 @@ export class Profile extends React.Component{
         const user = auth().currentUser;
         try{
             this.deleteFirestoreDoc()
+            this.deleteFirebaseImage()
             if (user) {
                 user.delete().then(
                     () => {console.log('account deleted')}
                 )
             }
         }catch(e){
-        alert('Login again to perform this operation!')
+            console.log(e)
+            alert('Login again to perform this operation!')
         }
     }
 
