@@ -99,4 +99,4 @@ export default function(props) {
     const navigation = useNavigation();
   
     return <Search {...props} navigation={navigation} />;
-  }
+}

@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
+
 export let ListComponent = (props) =>{
 
     const picture = props.snip.thumbnails.high['url']

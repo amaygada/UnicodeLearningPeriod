@@ -2,7 +2,7 @@ import * as React from 'react'
 import { BottomNavigation} from 'react-native-paper';
 import {Profile} from '../BottomNavFIles/Profile.js'
 import Search from '../BottomNavFIles/Search.js'
-import {Favourite} from '../BottomNavFIles/Favourites.js'
+import Favourite from '../BottomNavFIles/Favourites.js'
 import {Video} from '../BottomNavFIles/video.js'
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';

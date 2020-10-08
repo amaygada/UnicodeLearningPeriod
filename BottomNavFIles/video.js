@@ -69,8 +69,10 @@ export class Video extends React.Component{
     addToFavObj = async (videoId) => {
 
         const ref = firestore().collection('User')
-
-        favouriteVideos[videoId] = this.props.route.params.result['snippet']
+        favouriteVideos[videoId] = {}
+        favouriteVideos[videoId]['id'] = {}
+        favouriteVideos[videoId]['snippet'] = this.props.route.params.result['snippet']
+        favouriteVideos[videoId]['id']['videoId'] = videoId
         //console.log(favouriteVideos)
         let favString = JSON.stringify(favouriteVideos)
         await ref.doc(this.state.email).update({

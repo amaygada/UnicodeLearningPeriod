@@ -1,18 +1,40 @@
 import * as React from 'react'
-import {View , Text} from 'react-native'
+import {View , Text ,FlatList,TouchableOpacity , RefreshControl} from 'react-native'
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
+import {ListComponent} from '../Components/list_component.js'
+import { useNavigation } from '@react-navigation/native';
 
-let favouriteVideos = {}
-
-export class Favourite extends React.Component{
+let favv = []
+class Favourite extends React.Component{
 
     state = {
-        email : ''
+        email : '',
+        favouriteVideos : {},
+        refreshing:false
     }
 
-    ComponentWillMount = async () => {
+    UNSAFE_componentWillMount = async () => {
         await this.getFavObj()
+        //console.log(this.state.email)
+    }
+
+    componentDidUpdate = (prevProps , prevState) => {
+        if(prevState.email!==this.state.email || prevState.favouriteVideos!==this.state.favouriteVideos  || prevState.refreshing!==this.state.refreshing){
+            this.putInList()
+        }
+    }
+
+    putInList = () => {
+        favv = []
+        let a = this.state.favouriteVideos
+        if(a!=={}){
+            for(const f in a){
+                favv.push(a[f])
+            }
+            let e = this.state.email
+            this.setState({email:e})
+        }
     }
 
     getEmail = async () =>{
@@ -29,30 +51,62 @@ export class Favourite extends React.Component{
         this.setState({email:email})
         const db = firestore().collection('User');
         db.doc(`${email}`)
-        .get()
-        .then((doc) => {
+        .onSnapshot( (doc) => {
             if (doc.exists) {
                 if(doc.data().fav !==null){
                     let favObj = JSON.parse(doc.data().fav)
-                    console.log(favObj)
-                    favouriteVideos = favObj
+                    this.setState({favouriteVideos:favObj})
                 }else{
-                    favouriteVideos = {}
+                    this.setState({favouriteVideos:{}})
                 }
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
             }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
+        })
+        this.setState({refreshing:false})
+    }
+
+    navigateToVideo = (obj) =>{
+        const {navigation} = this.props
+        navigation.navigate('Video' , {result:obj})
+    }
+
+    onRefresh = async () =>{
+        this.setState({refreshing:true})
+        this.componentDidUpdate()
     }
     
     render(){
-        return(
-            <View style={{backgroundColor:"#fff" , flex:1}}>
-                <Text>hi</Text>
+        if(typeof favv[0] === 'undefined'){
+            return(
+                <View>
+                    <View style = {{justifyContent:'center' , padding:20 , alignItems:'center' , flex:1 , alignContent:'center'}}>
+                        <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' }}>Nothing to Show</Text>
+                        <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
+                    </View>
+                </View>
+            )
+        }else{
+            return(
+                <View style = {{flex:1 , backgroundColor:"#FFFFFF"}}>
+                    <FlatList style ={{flex:1}}
+                        data = {favv}
+                        renderItem = {({item}) => (
+                        <TouchableOpacity onPress={() => {this.navigateToVideo(item)}}>
+                            <ListComponent snip = {item.snippet}/>
+                        </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item['id']['videoId']}
+                        refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
+                    />
             </View>
-        )
+            )
+        }
     }
+}
+
+export default function(props) {
+    const navigation = useNavigation();
+    return <Favourite {...props} navigation={navigation} />;
 }
