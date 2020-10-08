@@ -20,7 +20,7 @@ class Search extends React.Component{
     getData = async () => {
         //this.setState({resultObj : {things:None}})
         const APIKEY = 'AIzaSyCZ9bu1mR6GgG5nyc5dYRK97GI_GdMxf2E'
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${this.state.searchquery}&type=video&key=${APIKEY}`
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${this.state.searchquery}&type=video&key=${APIKEY}`
         
         try{
             let response = await fetch(`${url}`)
