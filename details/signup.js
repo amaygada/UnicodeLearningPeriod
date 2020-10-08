@@ -7,6 +7,7 @@ import DatePicker from 'react-native-datepicker'
 import ImagePicker from 'react-native-image-picker'
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
     input:{
@@ -117,12 +118,22 @@ export default class SignUp extends React.Component{
         this.setState({dob:"Select Date of Birth" , name:"" , password:"" , email:"" , photo:null ,disabledSignUp:true ,disabledClear:true})
     }
 
+    saveEmail = async () => {
+        try{
+            await AsyncStorage.setItem('current' , this.state.email)
+
+        }catch(e){
+            console.log(e)
+        }
+    }
+
     signupNew =  () =>{
         auth()
         .createUserWithEmailAndPassword(`${this.state.email}`, `${this.state.password}`)
         .then(async () => {
             console.log('User account created & signed in!');
             await this.uploadImage()
+            this.saveEmail()
             this.addUser()
             
         })

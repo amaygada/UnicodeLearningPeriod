@@ -27,6 +27,7 @@ export class Profile extends React.Component{
     UNSAFE_componentWillMount = async() => {
         try{
             let emailVal = await AsyncStorage.getItem('current')
+            console.log(emailVal)
             if(emailVal!==null){
                 this.setState({email:emailVal})
                 this.getUserData()
@@ -47,17 +48,14 @@ export class Profile extends React.Component{
     getUserData = () => {
         const db = firestore().collection('User');
         db.doc(`${this.state.email}`)
-        .get()
-        .then((doc) => {
+        .onSnapshot((doc) => {
             if (doc.exists) {
                 this.setState({email:doc.data().email ,dob:doc.data().dob , gender:doc.data().gender , name:doc.data().name})
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
             }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
+        })
     }
 
 
