@@ -4,6 +4,7 @@ import {Card , Button} from 'react-native-paper'
 import YouTube from 'react-native-youtube';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
+import {YT_API} from '@env'
 
 let favouriteVideos = {}
 export class Video extends React.Component{
@@ -105,7 +106,7 @@ export class Video extends React.Component{
     render(){
 
         let obj = this.props.route.params.result
-        const APIKEY = 'AIzaSyCZ9bu1mR6GgG5nyc5dYRK97GI_GdMxf2E'
+        const APIKEY = YT_API
         let time = obj.snippet['publishedAt']
         time = time.toString().substring(0,10)
         let Channel = obj.snippet['channelTitle']

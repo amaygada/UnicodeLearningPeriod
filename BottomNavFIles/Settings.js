@@ -78,28 +78,28 @@ class Settings extends React.Component{
 
     render(){
         return(
-            <View style = {{flex:1 , margin:5}}>          
+            <View style = {{flex:1 , margin:3}}>          
                 <TouchableOpacity style={{margin:2}} onPress={this.navigateToProfile}>
-                    <Card style={{padding:10}}>
-                        <Text style = {{fontSize:15}}>PROFILE</Text>
+                    <Card style={{padding:20 , backgroundColor:"#474747"}}>
+                        <Text style = {{fontSize:15 , color:"#ffffff"}}>PROFILE</Text>
                     </Card>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{margin:2}} onPress={this.logOut}>
-                    <Card style={{padding:10}}>
-                        <Text style = {{fontSize:15}}>LOGOUT</Text>
+                    <Card style={{padding:20, backgroundColor:"#474747"}}>
+                        <Text style = {{fontSize:15 , color:"#ffffff"}}>LOGOUT</Text>
                     </Card>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{margin:2}} onPress={this.deleteAccount}>
-                    <Card style={{padding:10}}>
-                        <Text style = {{fontSize:15}}>DELETE ACCOUNT</Text>
+                    <Card style={{padding:20, backgroundColor:"#474747"}}>
+                        <Text style = {{fontSize:15 , color:"#ffffff"}}>DELETE ACCOUNT</Text>
                     </Card>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{margin:2}} onPress={this.deleteAccount}>
-                    <Card style={{padding:10}}>
-                        <Text style = {{fontSize:15}}>ABOUT US</Text>
+                    <Card style={{padding:20, backgroundColor:"#474747"}}>
+                        <Text style = {{fontSize:15 , color:"#ffffff"}}>ABOUT US</Text>
                     </Card>
                 </TouchableOpacity>
 

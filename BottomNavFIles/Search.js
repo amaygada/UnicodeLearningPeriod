@@ -3,7 +3,7 @@ import {View , Text , FlatList , TouchableOpacity,RefreshControl} from 'react-na
 import {Searchbar} from 'react-native-paper'
 import {ListComponent} from '../Components/list_component.js'
 import { useNavigation } from '@react-navigation/native';
-
+import {YT_API} from '@env'
 
 class Search extends React.Component{
 
@@ -19,7 +19,7 @@ class Search extends React.Component{
 
     getData = async () => {
         //this.setState({resultObj : {things:None}})
-        const APIKEY = 'AIzaSyCZ9bu1mR6GgG5nyc5dYRK97GI_GdMxf2E'
+        const APIKEY = YT_API //'AIzaSyCZ9bu1mR6GgG5nyc5dYRK97GI_GdMxf2E' //YT_API
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${this.state.searchquery}&type=video&key=${APIKEY}`
         
         try{
@@ -70,7 +70,7 @@ class Search extends React.Component{
             )
         }else{
         return(
-            <View style = {{flex:1 , backgroundColor:"#FFFFFF"}}>
+            <View style = {{flex:1 , backgroundColor:"#fff"}}>
                 <View style = {{padding:5}}>
                     <Searchbar
                         placeholder="Search"

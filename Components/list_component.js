@@ -20,7 +20,7 @@ export let ListComponent = (props) =>{
                 <View style = {{flexDirection:'row' , paddingRight:10 , paddingLeft:10 , paddingTop:10 }}>
                     <Icon name="user-circle" size={30} color="#900" style={{paddingTop:5 , paddingRight:10 , paddingLeft:10}}/>
                     <View style={{flex:1}}>
-                        <Text style = {{paddingTop:5 , fontSize:15, flex:1 ,flexWrap:'wrap'}}>{title}</Text>
+                        <Text style = {{paddingTop:5 , fontSize:15, flex:1 ,flexWrap:'wrap' , color:"#131313"}}>{title}</Text>
                         <Text style={{textAlign:'left',paddingBottom:5,paddingTop:3 , color:"#808080" }}>{channel}   -   {time}</Text>
                     </View>   
                 </View>

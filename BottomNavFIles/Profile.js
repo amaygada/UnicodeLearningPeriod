@@ -73,7 +73,7 @@ export class Profile extends React.Component{
                             <Text style={styles.text}> Email Id : {this.state.email} </Text>
                             <Text style={styles.text}> Gender : {this.state.gender} </Text>
                             <Text style={styles.text}> DOB : {this.state.dob}</Text>
-                            <Button  color="#1e4f74" style = {{marginTop:10}} mode="contained" onPress={()=>{this.props.navigation.goBack()}}>Go Back</Button>
+                            <Button  color="#373737" style = {{marginTop:10}} mode="contained" onPress={()=>{this.props.navigation.goBack()}}>Go Back</Button>
                         </View>
                 </View>
             )
