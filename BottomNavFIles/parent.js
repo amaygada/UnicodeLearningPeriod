@@ -4,6 +4,7 @@ import {Profile} from '../BottomNavFIles/Profile.js'
 import Search from '../BottomNavFIles/Search.js'
 import Favourite from '../BottomNavFIles/Favourites.js'
 import {Video} from '../BottomNavFIles/video.js'
+import Settings from '../BottomNavFIles/Settings.js'
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -11,14 +12,14 @@ import { NavigationContainer } from '@react-navigation/native';
 const TabBar = () => {
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-      { key: 'search', title: 'Search' , icon:'search-web' ,color:'#fff'},
+      { key: 'search', title: 'Search' , icon:'select-search' ,color:'#fff'},
       { key: 'favourites', title: 'Favourites', icon:'heart' , color:'#fff'},
-      { key: 'profile', title: 'Profile', icon:'account-box' , color:'#fff'},
+      { key: 'settings', title: 'Settings', icon:'nut' , color:'#fff'},
     ]);
   
     const renderScene = BottomNavigation.SceneMap({
       search: Search,
-      profile: Profile,
+      settings: Settings,
       favourites: Favourite
     });
   
@@ -43,6 +44,7 @@ const TabBar = () => {
         <Stack.Navigator initialRouteName="tabbar" screenOptions={{headerShown:false}}>
           <Stack.Screen name = "tabbar" component={TabBar} />
           <Stack.Screen name="Video" component={Video}/>
+          <Stack.Screen name="Profile" component={Profile}/>
         </Stack.Navigator>
       </NavigationContainer>
     );

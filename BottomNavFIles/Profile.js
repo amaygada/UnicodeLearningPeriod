@@ -58,71 +58,37 @@ export class Profile extends React.Component{
         })
     }
 
-    deleteFirebaseImage = () =>{
-        var image = storage().ref(`${this.state.email}.jpg`);
-
-        image.delete().then(function() {
-          console.log('profile image deleted succesfully')
-        }).catch(function(error) {
-          console.log('I really can\'t do anything about this')
-        });
-    }
-
-    logOut = async () =>{
-        auth()
-        .signOut()
-        .then(() => {
-            console.log('User signed out!')
-            RNRestart.Restart()
-        });
-        
-    }
-
-    deleteAccount = async ()=>{
-        const user = auth().currentUser;
-        try{
-            this.deleteFirestoreDoc()
-            this.deleteFirebaseImage()
-            if (user) {
-                user.delete().then(
-                    () => {console.log('account deleted')}
-                )
-            }
-        }catch(e){
-            console.log(e)
-            alert('Login again to perform this operation!')
-        }
-    }
-
-    deleteFirestoreDoc = () => {
-        const db = firestore().collection('User');
-        db.doc(`${this.state.email}`).delete().then(() => {
-            console.log("Document successfully deleted!");
-        }).catch(function(error) {
-            console.error("Error removing document: ", error);
-        });
-    }
-
     render(){
-        return(
-            <View style={{backgroundColor:"#fff" , flex:1 , justifyContent:'center'}}>          
-                   <View style={{justifyContent:'center' , alignItems:'center' , margin:20 }}>
-                        {this.state.photo && (
-                            <Image
-                            source={{ uri: this.state.photo}}
-                            style = {{width:200 , height:200}}
-                           />
-                        )}
-                        <Text style={styles.text}> Name : {this.state.name} </Text>
-                        <Text style={styles.text}> Email Id : {this.state.email} </Text>
-                        <Text style={styles.text}> Gender : {this.state.gender} </Text>
-                        <Text style={styles.text}> DOB : {this.state.dob}</Text>
-                        <Button  color="#1e4f74" style = {{marginTop:10}} mode="outlined" onPress={this.logOut}>Logout</Button>
-                        <Button  color="#1e4f74" style = {{marginTop:10}} mode="outlined" onPress={this.deleteAccount}>Delete Account</Button>
-                        <Text style={{fontSize:12,padding:3 , color:"#aeaeae"}}>(LOGIN AGAIN TO DELETE ACCOUNT)</Text>
+        if(this.state.photo!=null || this.state.name!='' || this.state.email!='' || this.state.dob!='' || this.state.gender!=''){
+            return(
+                <View style={{backgroundColor:"#fff" , flex:1 , justifyContent:'center'}}>          
+                       <View style={{justifyContent:'center' , alignItems:'center' , margin:20 }}>
+                            {this.state.photo && (
+                                <Image
+                                source={{ uri: this.state.photo}}
+                                style = {{width:200 , height:200}}
+                               />
+                            )}
+                            <Text style={styles.text}> Name : {this.state.name} </Text>
+                            <Text style={styles.text}> Email Id : {this.state.email} </Text>
+                            <Text style={styles.text}> Gender : {this.state.gender} </Text>
+                            <Text style={styles.text}> DOB : {this.state.dob}</Text>
+                            <Button  color="#1e4f74" style = {{marginTop:10}} mode="contained" onPress={()=>{this.props.navigation.goBack()}}>Go Back</Button>
+                        </View>
+                </View>
+            )
+        }else{
+            return(
+                <View style = {{flex:1}}>
+                    <View style = {{justifyContent:'center' , padding:20 , alignItems:'center' , flex:1 , alignContent:'center'}}>
+                        <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' }}>LOADING...</Text>
+                        <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' , color:"#aeaeae" , fontSize:15 }}>(Login again if the page doesn't load)</Text>
                     </View>
-            </View>
-        )
+                </View>
+            )
+        }
+       
     }
 
 }
+//<Button style={{backgroundColor:"1e4f74" , fontSize:20}}  color="#7d0633" onPress={()=>{ this.props.navigation.goBack()}}>GO BACK</Button>

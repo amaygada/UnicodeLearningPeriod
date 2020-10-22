@@ -64,7 +64,6 @@ class Favourite extends React.Component{
                 console.log("No such document!");
             }
         })
-        this.setState({refreshing:false})
     }
 
     navigateToVideo = (obj) =>{
@@ -80,10 +79,9 @@ class Favourite extends React.Component{
     render(){
         if(typeof favv[0] === 'undefined'){
             return(
-                <View>
+                <View style={{flex:1}}>
                     <View style = {{justifyContent:'center' , padding:20 , alignItems:'center' , flex:1 , alignContent:'center'}}>
                         <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' }}>Nothing to Show</Text>
-                        <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
                     </View>
                 </View>
             )
@@ -97,9 +95,7 @@ class Favourite extends React.Component{
                             <ListComponent snip = {item.snippet}/>
                         </TouchableOpacity>
                         )}
-                        keyExtractor={(item) => item['id']['videoId']}
-                        refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
-                    />
+                        keyExtractor={(item) => item['id']['videoId']}/>
             </View>
             )
         }

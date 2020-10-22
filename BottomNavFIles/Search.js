@@ -55,7 +55,7 @@ class Search extends React.Component{
     render(){
         if(this.state.resultObj.things==='None'){
             return(
-                <View>
+                <View style={{flex:1}}>
                     <View style={{padding:5}}>
                     <Searchbar
                         placeholder="Search"
@@ -64,7 +64,7 @@ class Search extends React.Component{
                     </View>
 
                     <View style = {{justifyContent:'center' , padding:20 , alignItems:'center' , flex:1 , alignContent:'center'}}>
-                        <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' }}>loading...</Text>
+                        <Text style = {{justifyContent:'center' , alignContent:'center' , alignItems:'center' }}>LOADING...</Text>
                     </View>
                 </View>
             )
