@@ -1,10 +1,10 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
-import {Login} from './details/login.js'
-import Signup from './details/signup.js'
+import {Login} from './Screens/details/login.js'
+import Signup from './Screens/details/signup.js'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {Parent} from './BottomNavFIles/parent.js'
+import {Parent} from './Screens/BottomNavFIles/parent.js'
 import auth from '@react-native-firebase/auth';
 
 

@@ -76,6 +76,11 @@ class Settings extends React.Component{
         });
     }
 
+    goToAboutUs = () => {
+        const {navigation} = this.props
+        navigation.navigate('AboutUs')
+    }
+
     render(){
         return(
             <View style = {{flex:1 , margin:3}}>          
@@ -97,7 +102,7 @@ class Settings extends React.Component{
                     </Card>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{margin:2}} onPress={this.deleteAccount}>
+                <TouchableOpacity style={{margin:2}} onPress={this.goToAboutUs}>
                     <Card style={{padding:20, backgroundColor:"#474747"}}>
                         <Text style = {{fontSize:15 , color:"#ffffff"}}>ABOUT US</Text>
                     </Card>

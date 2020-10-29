@@ -5,6 +5,7 @@ import Search from '../BottomNavFIles/Search.js'
 import Favourite from '../BottomNavFIles/Favourites.js'
 import {Video} from '../BottomNavFIles/video.js'
 import Settings from '../BottomNavFIles/Settings.js'
+import AboutUs from '../BottomNavFIles/AboutUs.js'
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -45,6 +46,7 @@ const TabBar = () => {
           <Stack.Screen name = "tabbar" component={TabBar} />
           <Stack.Screen name="Video" component={Video}/>
           <Stack.Screen name="Profile" component={Profile}/>
+          <Stack.Screen name="AboutUs" component={AboutUs}/>
         </Stack.Navigator>
       </NavigationContainer>
     );

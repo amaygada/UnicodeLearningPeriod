@@ -4,7 +4,6 @@ import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ListComponent} from '../Components/list_component.js'
 import { useNavigation } from '@react-navigation/native';
-
 let favv = []
 class Favourite extends React.Component{
 
